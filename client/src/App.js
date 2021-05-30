@@ -1,11 +1,12 @@
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import ButtonAppBar from "./components/Nav";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">This is the SEO Dashboard</header>
-    </div>
+    <Router>
+      <ButtonAppBar />
+    </Router>
   );
 }
 
