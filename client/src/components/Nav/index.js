@@ -41,7 +41,9 @@ export default function ButtonAppBar() {
               SEO Dashboard
             </Link>
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Link style={{ textDecoration: "none", color: "white" }} to="/login">
+            <Button color="inherit">Login</Button>
+          </Link>
         </Toolbar>
       </AppBar>
     </div>
