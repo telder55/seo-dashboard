@@ -23,21 +23,43 @@ export default function SignupForm() {
   function handleInputChange(event) {
     const { name, value } = event.target;
     setFormObject({ ...formObject, [name]: value });
-    console.log(formObject);
+    console.log(formObject.email);
   }
 
   function handleFormSubmit(event) {
     event.preventDefault();
-    if (formObject.first && formObject.last) {
+    if (
+      formObject.first &&
+      formObject.last &&
+      ValidateEmail(formObject.email) === true
+    ) {
       API.saveUser({
         first: formObject.first,
         last: formObject.last,
         email: formObject.email,
         password: formObject.password,
       })
-        .then((res) => console.log("IDK"))
+        .then((res) => console.log(res))
         .catch((err) => console.log(err));
     }
+  }
+
+  function ValidateEmail(mail) {
+    if (
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+        mail
+      )
+    ) {
+      return true;
+    }
+
+    setFormObject({
+      ...formObject,
+      error: true,
+      errortext: "Please enter a valid email like 'email@example.com'",
+    });
+    // alert("You have entered an invalid email address!");
+    return false;
   }
 
   return (
@@ -62,6 +84,8 @@ export default function SignupForm() {
           name="email"
           label="Email Address"
           onChange={handleInputChange}
+          error={formObject.error}
+          helperText={formObject.errortext}
         />{" "}
         <br />
         <TextField
