@@ -22,7 +22,14 @@ export default function SignupForm() {
 
   function handleInputChange(event) {
     const { name, value } = event.target;
-    setFormObject({ ...formObject, [name]: value });
+    setFormObject({
+      ...formObject,
+      [name]: value,
+      error: false,
+      errortext: false,
+      pass: false,
+      passtext: false,
+    });
     console.log(formObject.email);
   }
 
@@ -31,7 +38,8 @@ export default function SignupForm() {
     if (
       formObject.first &&
       formObject.last &&
-      ValidateEmail(formObject.email) === true
+      validateEmail(formObject.email) === true &&
+      validatePassword(formObject.password, formObject.confirm)
     ) {
       API.saveUser({
         first: formObject.first,
@@ -44,22 +52,51 @@ export default function SignupForm() {
     }
   }
 
-  function ValidateEmail(mail) {
+  function validateEmail(mail) {
     if (
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
         mail
       )
     ) {
+      setFormObject({
+        ...formObject,
+        error: false,
+        errortext: false,
+      });
       return true;
     }
+    //^([@#](?=[]{7,13}$)(?=[[:alnum:]]{7,13}$)(?=.*[A-Z]{1,}.*$).+)$
 
     setFormObject({
       ...formObject,
       error: true,
       errortext: "Please enter a valid email like 'email@example.com'",
     });
-    // alert("You have entered an invalid email address!");
     return false;
+  }
+
+  function validatePassword(p1, p2) {
+    if (!/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/.test(p1)) {
+      setFormObject({
+        ...formObject,
+        pass: true,
+        passtext: "Check password format",
+      });
+      return false;
+    } else if (p1 !== p2) {
+      setFormObject({
+        ...formObject,
+        pass: true,
+        passtext: "Password does not match!",
+      });
+      return false;
+    }
+    setFormObject({
+      ...formObject,
+      pass: false,
+      passtext: false,
+    });
+    return true;
   }
 
   return (
@@ -93,6 +130,7 @@ export default function SignupForm() {
           name="password"
           label="Password"
           onChange={handleInputChange}
+          helperText="Must be at least 8 characters and include at least one number, one uppercase letter and one special character "
           type="password"
           autoComplete="current-password"
         />{" "}
@@ -102,6 +140,8 @@ export default function SignupForm() {
           name="confirm"
           label="Confirm Password"
           onChange={handleInputChange}
+          error={formObject.pass}
+          helperText={formObject.passtext}
           type="password"
           autoComplete="current-password"
         />
