@@ -130,7 +130,7 @@ export default function SignupForm() {
           name="password"
           label="Password"
           onChange={handleInputChange}
-          helperText="Must be at least 8 characters and include at least one number, one uppercase letter and one special character "
+          helperText="Must be between 7-15 characters and include at least one number and one special character "
           type="password"
           autoComplete="current-password"
         />{" "}
