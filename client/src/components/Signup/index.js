@@ -30,11 +30,11 @@ export default function SignupForm() {
       pass: false,
       passtext: false,
     });
-    console.log(formObject.email);
   }
 
   function handleFormSubmit(event) {
     event.preventDefault();
+    API.checkUser(formObject.email).then((res) => console.log(res.data));
     if (
       formObject.first &&
       formObject.last &&
@@ -148,7 +148,14 @@ export default function SignupForm() {
       </div>
       <Button
         variant="contained"
-        disabled={!(formObject.first && formObject.last)}
+        disabled={
+          !(
+            formObject.first &&
+            formObject.last &&
+            formObject.email &&
+            formObject.confirm
+          )
+        }
         onClick={handleFormSubmit}
       >
         Create Account
