@@ -34,22 +34,30 @@ export default function SignupForm() {
 
   function handleFormSubmit(event) {
     event.preventDefault();
-    API.checkUser(formObject.email).then((res) => console.log(res.data));
-    if (
-      formObject.first &&
-      formObject.last &&
-      validateEmail(formObject.email) === true &&
-      validatePassword(formObject.password, formObject.confirm)
-    ) {
-      API.saveUser({
-        first: formObject.first,
-        last: formObject.last,
-        email: formObject.email,
-        password: formObject.password,
-      })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
-    }
+    API.checkUser(formObject.email).then((res) => {
+      if (res.data !== null) {
+        console.log("null");
+        setFormObject({
+          ...formObject,
+          error: true,
+          errortext: "That email has already been taken!",
+        });
+      } else if (
+        formObject.first &&
+        formObject.last &&
+        validateEmail(formObject.email) === true &&
+        validatePassword(formObject.password, formObject.confirm)
+      ) {
+        API.saveUser({
+          first: formObject.first,
+          last: formObject.last,
+          email: formObject.email,
+          password: formObject.password,
+        })
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err));
+      }
+    });
   }
 
   function validateEmail(mail) {
