@@ -4,6 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import API from "../../utils/API";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignupForm() {
+  let history = useHistory();
   const classes = useStyles();
   const [formObject, setFormObject] = useState({});
 
@@ -36,7 +38,6 @@ export default function SignupForm() {
     event.preventDefault();
     API.checkUser(formObject.email).then((res) => {
       if (res.data !== null) {
-        console.log("null");
         setFormObject({
           ...formObject,
           error: true,
@@ -54,7 +55,10 @@ export default function SignupForm() {
           email: formObject.email,
           password: formObject.password,
         })
-          .then((res) => console.log(res))
+          .then((res) => {
+            let url = "/dashboard";
+            history.push(url);
+          })
           .catch((err) => console.log(err));
       }
     });
