@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ButtonAppBar from "./components/Nav";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -15,6 +16,9 @@ function App() {
           </Route>
           <Route exact path={["/signup"]}>
             <Signup />
+          </Route>
+          <Route exact path={["/dashboard"]}>
+            <Dashboard />
           </Route>
         </Switch>
       </div>
