@@ -4,6 +4,7 @@ import ButtonAppBar from "./components/Nav";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -16,6 +17,9 @@ function App() {
           </Route>
           <Route exact path={["/signup"]}>
             <Signup />
+          </Route>
+          <Route exact path={["/login"]}>
+            <Login />
           </Route>
           <Route exact path={["/dashboard"]}>
             <Dashboard />
