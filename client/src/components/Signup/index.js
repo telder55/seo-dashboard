@@ -1,4 +1,3 @@
-// Take 'disabled' attribute off of Button when form can be submitted.
 import React, { useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
