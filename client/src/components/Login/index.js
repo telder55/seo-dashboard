@@ -36,18 +36,13 @@ export default function LoginForm() {
   function handleLogin(event) {
     event.preventDefault();
     API.checkUser(formObject.email).then((res) => {
-      if (res.data !== null) {
+      if (res.data == null) {
         setFormObject({
           ...formObject,
           error: true,
-          errortext: "That email has already been taken!",
+          errortext: "Invalid Username or password",
         });
-      } else if (
-        formObject.first &&
-        formObject.last &&
-        validateEmail(formObject.email) === true &&
-        validatePassword(formObject.password, formObject.confirm)
-      ) {
+      } else if (validateUser(formObject.email, formObject.password) === true) {
         API.saveUser({
           first: formObject.first,
           last: formObject.last,
@@ -63,50 +58,7 @@ export default function LoginForm() {
     });
   }
 
-  function validateEmail(mail) {
-    if (
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
-        mail
-      )
-    ) {
-      setFormObject({
-        ...formObject,
-        error: false,
-        errortext: false,
-      });
-      return true;
-    }
-    //^([@#](?=[]{7,13}$)(?=[[:alnum:]]{7,13}$)(?=.*[A-Z]{1,}.*$).+)$
-
-    setFormObject({
-      ...formObject,
-      error: true,
-      errortext: "Please enter a valid email like 'email@example.com'",
-    });
-    return false;
-  }
-
-  function validatePassword(p1, p2) {
-    if (!/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/.test(p1)) {
-      setFormObject({
-        ...formObject,
-        pass: true,
-        passtext: "Check password format",
-      });
-      return false;
-    } else if (p1 !== p2) {
-      setFormObject({
-        ...formObject,
-        pass: true,
-        passtext: "Password does not match!",
-      });
-      return false;
-    }
-    setFormObject({
-      ...formObject,
-      pass: false,
-      passtext: false,
-    });
+  function validateUser() {
     return true;
   }
 
@@ -132,14 +84,7 @@ export default function LoginForm() {
       </div>
       <Button
         variant="contained"
-        disabled={
-          !(
-            formObject.first &&
-            formObject.last &&
-            formObject.email &&
-            formObject.confirm
-          )
-        }
+        disabled={!(formObject.email && formObject.password)}
         onClick={handleLogin}
       >
         Login
