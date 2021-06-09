@@ -28,6 +28,7 @@ class Home extends React.Component {
           src={small}
           srcSet={`${small} 300w, ${small} 768w, ${large} 1280w,`}
           className="background-image"
+          alt=""
         />
       </div>
     );
