@@ -19,8 +19,6 @@ export default function SignupForm() {
   const classes = useStyles();
   const [formObject, setFormObject] = useState({});
 
-  useEffect(() => {}, []);
-
   function handleInputChange(event) {
     const { name, value } = event.target;
     setFormObject({

@@ -23,6 +23,7 @@ export default function LoginForm() {
 
   useEffect(() => {}, []);
 
+  ///clean this up
   function handleInputChange(event) {
     const { name, value } = event.target;
     setFormObject({
@@ -63,8 +64,6 @@ export default function LoginForm() {
   function validateUser() {
     return true;
   }
-
-  /// DAN CODE
 
   const authContext = useContext(AuthContext);
   const [signInSuccess, setSignInSuccess] = useState();
@@ -110,8 +109,6 @@ export default function LoginForm() {
     e.preventDefault();
     submitCredentials({ email, password });
   };
-
-  // END DAN CODE
 
   return (
     <>
