@@ -5,6 +5,7 @@ import Button from "@material-ui/core/Button";
 import API from "../../utils/API";
 import { useHistory } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -90,11 +91,12 @@ export default function LoginForm() {
         referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
         body: JSON.stringify(credentials), // body data type must match "Content-Type" header
       });
+
       const data = await fetchResponse.json();
+      console.log(data);
       authContext.setAuthState(data);
       setSignInSuccess(data.message);
       setSignInError(null);
-
       setTimeout(() => {
         setRedirectOnSignIn(true);
       }, 700);
@@ -112,37 +114,40 @@ export default function LoginForm() {
   // END DAN CODE
 
   return (
-    <form
-      className={classes.root}
-      noValidate
-      autoComplete="off"
-      onSubmit={handleSubmit}
-    >
-      <div>
-        <TextField
-          name="email"
-          label="Email Address"
-          onChange={(e) => setEmail(e.target.value.trim())}
-          error={formObject.error}
-          helperText={formObject.errortext}
-        />{" "}
-        <br />
-        <TextField
-          name="password"
-          label="Password"
-          onChange={(e) => setPassword(e.target.value.trim())}
-          type="password"
-          autoComplete="current-password"
-        />{" "}
-        <br />
-      </div>
-      <Button
-        type="submit"
-        variant="contained"
-        // disabled={!(formObject.email && formObject.password)}
+    <>
+      {redirectOnSignIn && <Redirect to="/dashboard" />}
+      <form
+        className={classes.root}
+        noValidate
+        autoComplete="off"
+        onSubmit={handleSubmit}
       >
-        Login
-      </Button>
-    </form>
+        <div>
+          <TextField
+            name="email"
+            label="Email Address"
+            onChange={(e) => setEmail(e.target.value.trim())}
+            error={formObject.error}
+            helperText={formObject.errortext}
+          />{" "}
+          <br />
+          <TextField
+            name="password"
+            label="Password"
+            onChange={(e) => setPassword(e.target.value.trim())}
+            type="password"
+            autoComplete="current-password"
+          />{" "}
+          <br />
+        </div>
+        <Button
+          type="submit"
+          variant="contained"
+          // disabled={!(formObject.email && formObject.password)}
+        >
+          Login
+        </Button>
+      </form>
+    </>
   );
 }

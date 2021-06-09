@@ -23,7 +23,6 @@ const verifyPassword = (passwordAttempt, hashedPassword) => {
 };
 
 const authPerson = async (req, res) => {
-  console.log("Inside authController");
   try {
     const { email, password } = req.body;
 
