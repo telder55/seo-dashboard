@@ -48,7 +48,7 @@ const AppRoutes = () => {
       <Suspense fallback={<h1>Loading...</h1>}>
         <Switch>
           <AuthenticatedRoute path="/dashboard">
-            <p>I'm authenticated</p>
+            <Dashboard />
           </AuthenticatedRoute>
           <UnauthenticatedRoutes />
         </Switch>
