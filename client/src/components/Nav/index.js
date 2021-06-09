@@ -46,9 +46,9 @@ const ButtonAppBar = () => {
 
           <Link
             style={{ textDecoration: "none", color: "white" }}
-            to={auth.isAuthenticated() ? "/logout" : "/login"}
+            to={"/login"}
           >
-            <Button color="inherit">
+            <Button color="inherit" onClick={auth.logout}>
               {auth.isAuthenticated() ? "Logout" : "Login"}
             </Button>
           </Link>
