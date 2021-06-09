@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -8,6 +8,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import "./style.css";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,8 +22,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ButtonAppBar() {
+const ButtonAppBar = () => {
   const classes = useStyles();
+  const auth = useContext(AuthContext);
 
   return (
     <div className={classes.root}>
@@ -41,11 +43,19 @@ export default function ButtonAppBar() {
               SEO Dashboard
             </Link>
           </Typography>
-          <Link style={{ textDecoration: "none", color: "white" }} to="/login">
-            <Button color="inherit">Login</Button>
+
+          <Link
+            style={{ textDecoration: "none", color: "white" }}
+            to={auth.isAuthenticated() ? "/logout" : "/login"}
+          >
+            <Button color="inherit">
+              {auth.isAuthenticated() ? "Logout" : "Login"}
+            </Button>
           </Link>
         </Toolbar>
       </AppBar>
     </div>
   );
-}
+};
+
+export default ButtonAppBar;

@@ -16,6 +16,7 @@ import { AuthProvider, AuthContext } from "./context/AuthContext";
 
 const AuthenticatedRoute = ({ children, ...rest }) => {
   const auth = useContext(AuthContext);
+  console.log(auth);
   return (
     <Route
       {...rest}
@@ -61,9 +62,9 @@ function App() {
   return (
     <Router>
       <div>
-        <ButtonAppBar />
         <Switch>
           <AuthProvider>
+            <ButtonAppBar />
             <AppRoutes />
           </AuthProvider>
         </Switch>
