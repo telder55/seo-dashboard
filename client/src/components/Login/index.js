@@ -2,8 +2,6 @@ import React, { useContext, useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import API from "../../utils/API";
-import { useHistory } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { Redirect } from "react-router-dom";
 import "./style.css";
@@ -18,12 +16,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LoginForm = () => {
-  let history = useHistory();
   const classes = useStyles();
   const [formError, setFormError] = useState({});
   const authContext = useContext(AuthContext);
   const [signInSuccess, setSignInSuccess] = useState();
-  const [signInError, setSignInError] = useState();
   const [redirectOnSignIn, setRedirectOnSignIn] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -55,10 +51,7 @@ const LoginForm = () => {
             errortext: "Incorrect email or password",
           })
         : onSuccess(data);
-
-      setSignInError(null);
     } catch (error) {
-      setSignInError(error.message);
       setSignInSuccess(null);
     }
   };
