@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -6,6 +6,7 @@ import API from "../../utils/API";
 import { useHistory } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { Redirect } from "react-router-dom";
+import "./style.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,55 +17,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function LoginForm() {
+const LoginForm = () => {
   let history = useHistory();
   const classes = useStyles();
-  const [formObject, setFormObject] = useState({});
-
-  useEffect(() => {}, []);
-
-  ///clean this up
-  function handleInputChange(event) {
-    const { name, value } = event.target;
-    setFormObject({
-      ...formObject,
-      [name]: value,
-      error: false,
-      errortext: false,
-      pass: false,
-      passtext: false,
-    });
-  }
-
-  function handleLogin(event) {
-    event.preventDefault();
-    API.checkUser(formObject.email).then((res) => {
-      if (res.data == null) {
-        setFormObject({
-          ...formObject,
-          error: true,
-          errortext: "Invalid Username or password",
-        });
-      } else if (validateUser(formObject.email, formObject.password) === true) {
-        API.saveUser({
-          first: formObject.first,
-          last: formObject.last,
-          email: formObject.email,
-          password: formObject.password,
-        })
-          .then((res) => {
-            let url = "/dashboard";
-            history.push(url);
-          })
-          .catch((err) => console.log(err));
-      }
-    });
-  }
-
-  function validateUser() {
-    return true;
-  }
-
+  const [formError, setFormError] = useState({});
   const authContext = useContext(AuthContext);
   const [signInSuccess, setSignInSuccess] = useState();
   const [signInError, setSignInError] = useState();
@@ -73,6 +29,15 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
   // eslint-disable-next-line no-unused-vars
   const [remember, setRemember] = useState(false);
+
+  function handleInputChange(event) {
+    const { name, value } = event.target;
+    setFormError({
+      ...formError,
+      error: false,
+      errortext: false,
+    });
+  }
 
   const submitCredentials = async (credentials) => {
     try {
@@ -92,59 +57,70 @@ export default function LoginForm() {
       });
 
       const data = await fetchResponse.json();
-      console.log(data);
-      authContext.setAuthState(data);
-      setSignInSuccess(data.message);
+      data.token === undefined
+        ? setFormError({
+            ...formError,
+            error: true,
+            errortext: "Incorrect email or password",
+          })
+        : onSuccess(data);
+
       setSignInError(null);
-      setTimeout(() => {
-        setRedirectOnSignIn(true);
-      }, 700);
     } catch (error) {
       setSignInError(error.message);
       setSignInSuccess(null);
     }
   };
 
-  const handleSubmit = (e) => {
+  function onSuccess(data) {
+    authContext.setAuthState(data);
+    setSignInSuccess(data.message);
+    setTimeout(() => {
+      setRedirectOnSignIn(true);
+    }, 700);
+  }
+
+  function handleLogin(e) {
     e.preventDefault();
     submitCredentials({ email, password });
-  };
+  }
 
   return (
     <>
       {redirectOnSignIn && <Redirect to="/dashboard" />}
+      {signInSuccess && <p>nice</p>}
+      {signInError && <h1>Error: {signInError} </h1>}
       <form
         className={classes.root}
         noValidate
         autoComplete="off"
-        onSubmit={handleSubmit}
+        onSubmit={handleLogin}
       >
         <div>
+          <p className="error-text">{formError.errortext}</p>
           <TextField
             name="email"
             label="Email Address"
             onChange={(e) => setEmail(e.target.value.trim())}
-            error={formObject.error}
-            helperText={formObject.errortext}
           />{" "}
           <br />
           <TextField
             name="password"
             label="Password"
-            onChange={(e) => setPassword(e.target.value.trim())}
+            onChange={(e) => {
+              setPassword(e.target.value.trim());
+            }}
             type="password"
             autoComplete="current-password"
           />{" "}
           <br />
         </div>
-        <Button
-          type="submit"
-          variant="contained"
-          // disabled={!(formObject.email && formObject.password)}
-        >
+        <Button type="submit" variant="contained">
           Login
         </Button>
       </form>
     </>
   );
-}
+};
+
+export default LoginForm;
