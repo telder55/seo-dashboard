@@ -9,9 +9,6 @@ const Dashboard = () => {
   return (
     <div>
       <h1>Welcome to Your Dashboard!</h1>
-      <Button variant="contained" onClick={authContext.logout}>
-        Logout
-      </Button>
     </div>
   );
 };
