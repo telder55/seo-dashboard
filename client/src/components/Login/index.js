@@ -30,15 +30,6 @@ const LoginForm = () => {
   // eslint-disable-next-line no-unused-vars
   const [remember, setRemember] = useState(false);
 
-  function handleInputChange(event) {
-    const { name, value } = event.target;
-    setFormError({
-      ...formError,
-      error: false,
-      errortext: false,
-    });
-  }
-
   const submitCredentials = async (credentials) => {
     try {
       const url = "/api/auth";
@@ -73,6 +64,7 @@ const LoginForm = () => {
   };
 
   function onSuccess(data) {
+    setFormError({});
     authContext.setAuthState(data);
     setSignInSuccess(data.message);
     setTimeout(() => {
@@ -88,8 +80,7 @@ const LoginForm = () => {
   return (
     <>
       {redirectOnSignIn && <Redirect to="/dashboard" />}
-      {signInSuccess && <p>nice</p>}
-      {signInError && <h1>Error: {signInError} </h1>}
+
       <form
         className={classes.root}
         noValidate
@@ -115,9 +106,12 @@ const LoginForm = () => {
           />{" "}
           <br />
         </div>
+        <br />
+
         <Button type="submit" variant="contained">
           Login
         </Button>
+        {signInSuccess && <p className="success-text">Success</p>}
       </form>
     </>
   );
