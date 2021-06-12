@@ -21,4 +21,9 @@ export default {
   checkUser: function (email) {
     return axios.get("/api/users/" + email);
   },
+
+  getRedirect: function () {
+    console.log("API.js");
+    return axios.get("/api/redirect/");
+  },
 };
