@@ -21,4 +21,12 @@ export default {
   checkUser: function (email) {
     return axios.get("/api/users/" + email);
   },
+
+  getRedirect: function () {
+    return axios.get("/api/redirect/");
+  },
+
+  exchangeCode: function (code) {
+    return axios.post("/api/redirect/", code);
+  },
 };

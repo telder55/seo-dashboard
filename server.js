@@ -1,31 +1,9 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const routes = require("./routes");
 const app = express();
 const PORT = process.env.PORT || 3001;
-
-const { google } = require("googleapis");
-const oauth2 = google.oauth2("v2");
-
-//Google Api stuff
-
-const oauth2Client = new google.auth.OAuth2(
-  "581749580855-7os7thh02ips6t6okk4hdklg0s54eopu.apps.googleusercontent.com",
-  "YUBY58RHR7TKKDCKllgO66ZQ",
-  "http://localhost:3000/dashboard"
-);
-
-const scopes = "https://www.googleapis.com/auth/webmasters";
-
-const url = oauth2Client.generateAuthUrl({
-  // 'online' (default) or 'offline' (gets refresh_token)
-  access_type: "offline",
-
-  // If you only need one scope you can pass it as a string
-  scope: scopes,
-});
-
-console.log(url);
 
 // Define middleware here
 app.use(express.urlencoded({ extended: true }));
