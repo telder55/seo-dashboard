@@ -22,18 +22,25 @@ const url = oauth2Client.generateAuthUrl({
 });
 
 const redirectFunction = (req, res) => {
-  console.log(url);
   axios
     .get(
       "https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fwebmasters&response_type=code&client_id=581749580855-7os7thh02ips6t6okk4hdklg0s54eopu.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fdashboard"
     )
     .then((response) => {
-      console.log(typeof response);
-      console.log(Object.keys(response));
       return res.status(200).json(url);
     });
 };
 
+const exchangeFunc = async (req, res) => {
+  console.log(req.body.code);
+  const { tokens } = await oauth2Client.getToken(req.body.code);
+  await console.log(tokens);
+  //   oauth2Client.setCredentials(tokens);
+  //   const usr_info = await oauth2.userinfo.get({ auth: oauth2Client });
+  //   console.log(usr_info);
+};
+
 module.exports = {
   redirectFunction,
+  exchangeFunc,
 };

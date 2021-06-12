@@ -23,7 +23,10 @@ export default {
   },
 
   getRedirect: function () {
-    console.log("API.js");
     return axios.get("/api/redirect/");
+  },
+
+  exchangeCode: function (code) {
+    return axios.post("/api/redirect/", code);
   },
 };
