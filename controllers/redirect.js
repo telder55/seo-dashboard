@@ -32,12 +32,20 @@ const redirectFunction = (req, res) => {
 };
 
 const exchangeFunc = async (req, res) => {
-  console.log(req.body.code);
   const { tokens } = await oauth2Client.getToken(req.body.code);
-  await console.log(tokens);
-  //   oauth2Client.setCredentials(tokens);
-  //   const usr_info = await oauth2.userinfo.get({ auth: oauth2Client });
-  //   console.log(usr_info);
+  const apiResponse = await axios({
+    method: "post",
+    url: "https://www.googleapis.com/webmasters/v3/sites/sc-domain:nevadamentalhealth.com/searchAnalytics/query?&",
+    data: {
+      startDate: "2021-04-01",
+      endDate: "2021-05-01",
+      dimensions: ["country", "device"],
+    },
+    headers: { Authorization: `Bearer ${tokens.access_token}` },
+  });
+
+  console.log(tokens);
+  console.log(apiResponse.data);
 };
 
 module.exports = {
