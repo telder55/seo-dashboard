@@ -1,16 +1,12 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import API from "../../utils/API";
-import { AuthContext } from "../../context/AuthContext";
 import "./style.css";
 const queryString = require("query-string");
 const parsed = queryString.parse(window.location.search);
 
 const Dashboard = () => {
-  const authContext = useContext(AuthContext);
   const [newUrl, setNewUrl] = useState("");
-
-  console.log(parsed.code);
 
   useEffect(() => {
     redirectURL();
