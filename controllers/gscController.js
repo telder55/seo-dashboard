@@ -2,6 +2,7 @@ require("dotenv").config();
 const { google } = require("googleapis");
 const oauth2 = google.oauth2("v2");
 const axios = require("axios");
+const db = require("../models");
 
 //Google Api stuff
 
@@ -33,6 +34,20 @@ const redirectFunction = (req, res) => {
 
 const exchangeFunc = async (req, res) => {
   const { tokens } = await oauth2Client.getToken(req.body.code);
+  const updateDB = await updateRefresh(req.body.id, tokens.refresh_token);
+  console.log("Token added to db: ", tokens.refresh_token);
+};
+
+const updateRefresh = (id, token) => {
+  db.User.findOneAndUpdate(
+    { _id: id },
+    {
+      refreshtoken: token,
+    }
+  ).then();
+};
+
+const getMetrics = async () => {
   const apiResponse = await axios({
     method: "post",
     url: "https://www.googleapis.com/webmasters/v3/sites/sc-domain:nevadamentalhealth.com/searchAnalytics/query?&",
@@ -43,9 +58,7 @@ const exchangeFunc = async (req, res) => {
     },
     headers: { Authorization: `Bearer ${tokens.access_token}` },
   });
-
-  console.log(tokens);
-  console.log(apiResponse.data);
+  console.log("api response: ", apiResponse.data);
 };
 
 module.exports = {

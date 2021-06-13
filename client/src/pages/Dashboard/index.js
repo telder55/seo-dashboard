@@ -7,10 +7,51 @@ const parsed = queryString.parse(window.location.search);
 
 const Dashboard = () => {
   const [newUrl, setNewUrl] = useState("");
+  const [connectionState, setConnectionState] = useState(false);
+  const person = JSON.parse(localStorage.getItem("userInfo"));
+  const currentUser = { id: person[0]._id, code: parsed.code };
+  console.log(currentUser);
 
   useEffect(() => {
     redirectURL();
-  });
+    if (parsed.code) {
+      setConnectionState(true);
+      getToken();
+    }
+  }, []);
+
+  function ConnectedGreeting(props) {
+    return <h1>Nice, we're connected!</h1>;
+  }
+
+  function InitialGreeting(props) {
+    return (
+      <div className="welcome">
+        <h2>Welcome to Your Dashboard {person[0].first}!</h2>
+        <p>
+          First let's get you connected to Google Search Console to start
+          tracking your search metrics.
+        </p>
+
+        <Button
+          className="connect-button"
+          variant="contained"
+          color="secondary"
+          onClick={executeRedirect}
+        >
+          Connect Google{" "}
+        </Button>
+      </div>
+    );
+  }
+
+  function Greeting(props) {
+    const isLoggedIn = props.isLoggedIn;
+    if (isLoggedIn) {
+      return <ConnectedGreeting />;
+    }
+    return <InitialGreeting />;
+  }
 
   const executeRedirect = (e) => {
     e.preventDefault();
@@ -22,19 +63,16 @@ const Dashboard = () => {
     });
   };
 
-  const getToken = (e) => {
-    e.preventDefault();
-    API.exchangeCode(parsed).then((res) => {
+  const getToken = () => {
+    API.exchangeCode(currentUser).then((res) => {
       console.log("Token: ", res.data);
     });
   };
 
   return (
-    <div>
-      <h1>Welcome to Your Dashboard!</h1>
-      <Button onClick={executeRedirect}>Connect Google Search Console. </Button>
-      <Button onClick={getToken}>Click to get token </Button>
-    </div>
+    <>
+      <Greeting isLoggedIn={connectionState} />
+    </>
   );
 };
 

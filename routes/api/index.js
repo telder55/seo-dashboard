@@ -4,7 +4,7 @@ const { authPerson } = require("../../controllers/authController");
 const {
   redirectFunction,
   exchangeFunc,
-} = require("../../controllers/redirect");
+} = require("../../controllers/gscController");
 
 // User Routes
 router.use("/users", userRoutes);
@@ -16,7 +16,6 @@ router.post("/auth", authPerson);
 router.get("/redirect", redirectFunction);
 
 // Exchange Code for Token
-
-router.post("/redirect", exchangeFunc);
+router.post("/exchange", exchangeFunc);
 
 module.exports = router;
