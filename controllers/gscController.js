@@ -33,9 +33,15 @@ const redirectFunction = (req, res) => {
 };
 
 const exchangeFunc = async (req, res) => {
-  const { tokens } = await oauth2Client.getToken(req.body.code);
-  const updateDB = await updateRefresh(req.body.id, tokens.refresh_token);
-  console.log("Token added to db: ", tokens.refresh_token);
+  try {
+    const { tokens } = await oauth2Client.getToken(req.body.code);
+    const updateDB = await updateRefresh(req.body.id, tokens.refresh_token);
+    console.log("Token added to db: ", tokens.refresh_token);
+    return res.status(200).json(tokens.refresh_token);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error);
+  }
 };
 
 const updateRefresh = (id, token) => {
