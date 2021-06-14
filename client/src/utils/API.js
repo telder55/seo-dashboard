@@ -30,8 +30,8 @@ const API = {
     return axios.post("/api/exchange/", code);
   },
 
-  getSearch: function () {
-    return axios.post("/api/search/");
+  getSearch: function (userId) {
+    return axios.post("/api/search/", userId);
   },
 };
 

@@ -22,14 +22,6 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// Hashes password automatically
-userSchema.pre("save", async function (next) {
-  const bcryptSalt = 10;
-  const hash = await bcrypt.hash(this.password, Number(bcryptSalt));
-  this.refreshtoken = hash;
-  next();
-});
-
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;

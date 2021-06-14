@@ -44,16 +44,6 @@ const exchangeFunc = async (req, res) => {
   }
 };
 
-// const updateRefresh = (id, token) => {
-//   db.User.findOneAndUpdate(
-//     { _id: id },
-//     {
-//       refreshtoken: token,
-//       gscconnected: true,
-//     }
-//   ).then();
-// };
-
 const updateRefresh = (id, token) => {
   db.User.findById(id, function (err, doc) {
     if (err) return false;
@@ -65,10 +55,17 @@ const updateRefresh = (id, token) => {
 
 const getRefresh = async (req, res) => {
   try {
+    const currentUserId = req.body.id;
+    console.log("User Id ", currentUserId);
+    const getUsersRefresh = await db.User.findById(
+      currentUserId,
+      "refreshtoken"
+    ).exec();
+    console.log("something", getUsersRefresh.refreshtoken);
     const newPost = {
       client_id: process.env.GOOGLE_CLIENT_ID,
       client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      refresh_token: process.env.NMH_REFRESH,
+      refresh_token: getUsersRefresh.refreshtoken,
       grant_type: "refresh_token",
     };
     const refreshToken = await axios({

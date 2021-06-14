@@ -20,7 +20,6 @@ const Dashboard = () => {
       return;
     } else if (tempPerson) {
       setConnectionState(true);
-      console.log(tempPerson);
     } else if (currentUser.code) {
       getToken();
     } else setConnectionState(false);
@@ -107,7 +106,7 @@ const Dashboard = () => {
   };
 
   const getSearchData = () => {
-    API.getSearch().then((res) => {
+    API.getSearch(currentUser).then((res) => {
       setSearchData({
         clicks: res.data.rows[0].clicks,
         impressions: res.data.rows[0].impressions,
