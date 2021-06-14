@@ -11,6 +11,7 @@ const userSchema = new Schema({
   password: { type: String, required: true },
   date: { type: Date, default: Date.now },
   refreshtoken: { type: String },
+  gscconnected: { type: Boolean, default: false, required: true },
 });
 
 // Hashes password automatically
@@ -18,6 +19,14 @@ userSchema.pre("save", async function (next) {
   const bcryptSalt = 10;
   const hash = await bcrypt.hash(this.password, Number(bcryptSalt));
   this.password = hash;
+  next();
+});
+
+// Hashes password automatically
+userSchema.pre("save", async function (next) {
+  const bcryptSalt = 10;
+  const hash = await bcrypt.hash(this.password, Number(bcryptSalt));
+  this.refreshtoken = hash;
   next();
 });
 

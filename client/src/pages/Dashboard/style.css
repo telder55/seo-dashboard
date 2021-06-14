@@ -9,3 +9,7 @@ h1 {
 .connected {
   text-align: center;
 }
+
+.make-green {
+  color: green;
+}

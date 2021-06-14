@@ -37,20 +37,30 @@ const exchangeFunc = async (req, res) => {
     const { tokens } = await oauth2Client.getToken(req.body.code);
     const updateDB = await updateRefresh(req.body.id, tokens.refresh_token);
     console.log("Token added to db: ", tokens.refresh_token);
-    return res.status(200).json(tokens.refresh_token);
+    return res.status(200).json(true);
   } catch (error) {
     console.log(error);
     return res.status(400).json(error);
   }
 };
 
+// const updateRefresh = (id, token) => {
+//   db.User.findOneAndUpdate(
+//     { _id: id },
+//     {
+//       refreshtoken: token,
+//       gscconnected: true,
+//     }
+//   ).then();
+// };
+
 const updateRefresh = (id, token) => {
-  db.User.findOneAndUpdate(
-    { _id: id },
-    {
-      refreshtoken: token,
-    }
-  ).then();
+  db.User.findById(id, function (err, doc) {
+    if (err) return false;
+    doc.refreshtoken = token;
+    doc.gscconnected = true;
+    doc.save();
+  }).then();
 };
 
 const getRefresh = async (req, res) => {
@@ -58,8 +68,7 @@ const getRefresh = async (req, res) => {
     const newPost = {
       client_id: process.env.GOOGLE_CLIENT_ID,
       client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      refresh_token:
-        "1//04c2Or_qnZR7QCgYIARAAGAQSNwF-L9IrcBIkRe6_ebRlNLX7Q2gEFTYK2f9E9D1UvfkPjySqDW91whDWO7GkFqU6kIbpq-FFrcg",
+      refresh_token: process.env.NMH_REFRESH,
       grant_type: "refresh_token",
     };
     const refreshToken = await axios({
@@ -82,7 +91,7 @@ const getMetrics = async (token) => {
     data: {
       startDate: "2021-05-01",
       endDate: "2021-05-31",
-      dimensions: ["country", "device"],
+      searchType: "web",
     },
     headers: { Authorization: `Bearer ${token}` },
   });
