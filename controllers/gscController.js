@@ -53,21 +53,44 @@ const updateRefresh = (id, token) => {
   ).then();
 };
 
-const getMetrics = async () => {
+const getRefresh = async (req, res) => {
+  try {
+    const newPost = {
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      client_secret: process.env.GOOGLE_CLIENT_SECRET,
+      refresh_token:
+        "1//04c2Or_qnZR7QCgYIARAAGAQSNwF-L9IrcBIkRe6_ebRlNLX7Q2gEFTYK2f9E9D1UvfkPjySqDW91whDWO7GkFqU6kIbpq-FFrcg",
+      grant_type: "refresh_token",
+    };
+    const refreshToken = await axios({
+      method: "post",
+      url: "https://oauth2.googleapis.com/token",
+      data: newPost,
+    });
+    const metrics = await getMetrics(refreshToken.data.access_token);
+
+    return res.status(200).json(metrics);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const getMetrics = async (token) => {
   const apiResponse = await axios({
     method: "post",
     url: "https://www.googleapis.com/webmasters/v3/sites/sc-domain:nevadamentalhealth.com/searchAnalytics/query?&",
     data: {
-      startDate: "2021-04-01",
-      endDate: "2021-05-01",
+      startDate: "2021-05-01",
+      endDate: "2021-05-31",
       dimensions: ["country", "device"],
     },
-    headers: { Authorization: `Bearer ${tokens.access_token}` },
+    headers: { Authorization: `Bearer ${token}` },
   });
-  console.log("api response: ", apiResponse.data);
+  return apiResponse.data;
 };
 
 module.exports = {
   redirectFunction,
   exchangeFunc,
+  getRefresh,
 };

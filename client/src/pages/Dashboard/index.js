@@ -1,10 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import API from "../../utils/API";
 import "./style.css";
-import { AuthContext } from "../../context/AuthContext";
-
 const queryString = require("query-string");
 const parsed = queryString.parse(window.location.search);
 
@@ -14,8 +11,6 @@ const Dashboard = () => {
   const person = JSON.parse(localStorage.getItem("userInfo"));
   const tempPerson = localStorage.getItem("connectionStatus");
   const currentUser = { id: person[0]._id, code: parsed.code };
-  const history = useHistory();
-  const auth = useContext(AuthContext);
 
   useEffect(() => {
     redirectURL();
@@ -30,7 +25,19 @@ const Dashboard = () => {
   }, []);
 
   function ConnectedGreeting(props) {
-    return <h1>Nice, we're connected!</h1>;
+    return (
+      <div className="connected">
+        <h2>{person[0].first}'s Dashboard</h2>
+        <Button
+          className="connect-button"
+          variant="contained"
+          color="secondary"
+          onClick={getSearchData}
+        >
+          Call API{" "}
+        </Button>
+      </div>
+    );
   }
 
   function InitialGreeting(props) {
@@ -83,7 +90,12 @@ const Dashboard = () => {
         localStorage.setItem("connectionStatus", updatedUserInfo);
         window.location.replace("/dashboard");
       }
-      // console.log(res.data);
+    });
+  };
+
+  const getSearchData = () => {
+    API.getSearch().then((res) => {
+      console.log(res.data);
     });
   };
 

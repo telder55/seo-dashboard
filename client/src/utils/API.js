@@ -29,6 +29,10 @@ const API = {
   exchangeCode: function (code) {
     return axios.post("/api/exchange/", code);
   },
+
+  getSearch: function () {
+    return axios.post("/api/search/");
+  },
 };
 
 export default API;
