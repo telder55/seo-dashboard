@@ -61,8 +61,7 @@ const getRefresh = async (req, res) => {
       currentUserId,
       "refreshtoken"
     ).exec();
-    console.log("something", getUsersRefresh.refreshtoken);
-    const newPost = {
+    const newPost = await {
       client_id: process.env.GOOGLE_CLIENT_ID,
       client_secret: process.env.GOOGLE_CLIENT_SECRET,
       refresh_token: getUsersRefresh.refreshtoken,
