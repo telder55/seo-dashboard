@@ -10,6 +10,8 @@ const userSchema = new Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   date: { type: Date, default: Date.now },
+  refreshtoken: { type: String },
+  gscconnected: { type: Boolean, default: false, required: true },
 });
 
 // Hashes password automatically

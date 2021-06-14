@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default {
+const API = {
   // Gets all users
   getUsers: function () {
     return axios.get("/api/users");
@@ -27,6 +27,12 @@ export default {
   },
 
   exchangeCode: function (code) {
-    return axios.post("/api/redirect/", code);
+    return axios.post("/api/exchange/", code);
+  },
+
+  getSearch: function (userId) {
+    return axios.post("/api/search/", userId);
   },
 };
+
+export default API;

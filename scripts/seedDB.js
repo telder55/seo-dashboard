@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const db = require("../models");
+require("dotenv").config();
 
 // This file empties the User collection and inserts the users below
 
@@ -13,6 +14,8 @@ db.User.remove({})
       email: "telder55@gmail.com",
       password: "abcd@1234",
       date: new Date(Date.now()),
+      refreshtoken: process.env.NMH_REFRESH,
+      gscconnected: true,
     })
   )
   .then((res) => {
