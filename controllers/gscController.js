@@ -21,9 +21,8 @@ const url = oauth2Client.generateAuthUrl({
   // If you only need one scope you can pass it as a string
   scope: scopes,
 });
-console.log(url);
+
 const redirectFunction = (req, res) => {
-  console.log("Over Here");
   axios.get(url).then((response) => {
     return res.status(200).json(url);
   });
@@ -41,23 +40,14 @@ const exchangeFunc = async (req, res) => {
   }
 };
 
-// const updateRefresh = (id, token) => {
-//   db.User.findById(id, function (err, doc) {
-//     if (err) return false;
-//     doc.refreshtoken = token;
-//     doc.gscconnected = true;
-//     doc.save();
-//   }).then();
-// };
-
-const updateRefresh = (id, token) => {
-  db.User.findOneAndUpdate(
+const updateRefresh = async (id, token) => {
+  await db.User.findOneAndUpdate(
     { _id: id },
     {
       refreshtoken: token,
       gscconnected: true,
     }
-  ).then();
+  ).then(console.log("updaterefreshdbthing"));
 };
 
 const getRefresh = async (req, res) => {
