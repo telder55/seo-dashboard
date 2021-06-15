@@ -47,7 +47,7 @@ const updateRefresh = async (id, token) => {
       refreshtoken: token,
       gscconnected: true,
     }
-  ).then(console.log("updaterefreshdbthing"));
+  ).then();
 };
 
 const getRefresh = async (req, res) => {
