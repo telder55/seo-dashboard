@@ -92,6 +92,7 @@ const Dashboard = () => {
     });
   };
 
+  // exchange auth code for token
   const getToken = () => {
     API.exchangeCode(currentUser).then((res) => {
       if (res.status === 200) {
