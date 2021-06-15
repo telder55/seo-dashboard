@@ -41,13 +41,23 @@ const exchangeFunc = async (req, res) => {
   }
 };
 
+// const updateRefresh = (id, token) => {
+//   db.User.findById(id, function (err, doc) {
+//     if (err) return false;
+//     doc.refreshtoken = token;
+//     doc.gscconnected = true;
+//     doc.save();
+//   }).then();
+// };
+
 const updateRefresh = (id, token) => {
-  db.User.findById(id, function (err, doc) {
-    if (err) return false;
-    doc.refreshtoken = token;
-    doc.gscconnected = true;
-    doc.save();
-  }).then();
+  db.User.findOneAndUpdate(
+    { _id: id },
+    {
+      refreshtoken: token,
+      gscconnected: true,
+    }
+  ).then();
 };
 
 const getRefresh = async (req, res) => {
