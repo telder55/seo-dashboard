@@ -20,9 +20,10 @@ const Dashboard = () => {
       return;
     } else if (tempPerson) {
       setConnectionState(true);
+      return;
     } else if (currentUser.code) {
       getToken();
-    } else setConnectionState(false);
+    }
   }, []);
 
   function ConnectedGreeting(props) {
@@ -46,7 +47,7 @@ const Dashboard = () => {
           color="secondary"
           onClick={getSearchData}
         >
-          Call API{" "}
+          Get Last Month's Search Metrics{" "}
         </Button>
       </div>
     );
@@ -112,7 +113,6 @@ const Dashboard = () => {
         impressions: res.data.rows[0].impressions,
         position: res.data.rows[0].position,
       });
-      console.log(res.data.rows[0]);
     });
   };
 
