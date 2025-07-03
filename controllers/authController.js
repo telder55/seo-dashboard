@@ -26,27 +26,27 @@ const authPerson = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const person = await db.User.find({ email }).exec();
+    const person = await db.User.findOne({ email }).exec();
 
     if (!person) {
       console.log("authPerson");
       return res.status(403).json({ message: "Wrong email or password." });
     }
+
     console.log(`email: ${email}, password: ${password}`);
     console.log("person pwd", person);
 
-    const passwordValid = await verifyPassword(password, person[0].password);
-    console.log("21");
+    const passwordValid = await verifyPassword(password, person.password);
+
     if (passwordValid) {
-      console.log("23");
-      const { password, name, ...rest } = person;
-      const userInfo = Object.assign({}, { ...rest });
+      const { password: pwd, ...rest } = person.toObject();
+      const userInfo = Object.assign({}, rest);
       const token = createToken(person);
 
       const decodedToken = jwtDecode(token);
       const expiresAt = decodedToken.exp;
       console.log(
-        `token: ${token}, expiresAt: ${expiresAt}, userInfo: ${userInfo}`
+        `token: ${token}, expiresAt: ${expiresAt}, userInfo: ${JSON.stringify(userInfo)}`
       );
       return res.status(200).json({
         token,
